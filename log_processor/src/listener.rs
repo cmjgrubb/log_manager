@@ -12,7 +12,7 @@ pub fn syslog() {
     let file = OpenOptions::new()
         .write(true)
         .append(true)
-        .open("/etc/log_manager");
+        .open("/var/log/log_manager");
 
     let mut file = match file {
         Ok(file) => file,
@@ -24,12 +24,14 @@ pub fn syslog() {
         }
     };
 
+    let mut processor = processor::Processor::new.unwrap();
+
     loop {
         let mut buf = [0; 1024];
         match socket.recv_from(&mut buf) {
             Ok((amt, _src)) => {
                 let text = str::from_utf8(&buf[..amt]).unwrap();
-                // TODO process log function call
+                processor.process_log(text).unwrap();
             }
             Err(e) => {
                 writeln!(file, "Error receiving log: {e}").unwrap();

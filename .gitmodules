@@ -1,0 +1,3 @@
+[submodule "log_api"]
+	path = log_api
+	url = ssh://git@github.com/cmjgrubb/log_manager/log_api
