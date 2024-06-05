@@ -1,0 +1,14 @@
+/home/administrator/GitHub/log_manager/log_api/target/debug/deps/libclang_sys-4c74dd039fd8e019.rmeta: /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/macros.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/common.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/dynamic.rs
+
+/home/administrator/GitHub/log_manager/log_api/target/debug/deps/libclang_sys-4c74dd039fd8e019.rlib: /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/macros.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/common.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/dynamic.rs
+
+/home/administrator/GitHub/log_manager/log_api/target/debug/deps/clang_sys-4c74dd039fd8e019.d: /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/macros.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/common.rs /home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/dynamic.rs
+
+/home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/lib.rs:
+/home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/support.rs:
+/home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/clang-sys-1.8.1/src/link.rs:
+/home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/macros.rs:
+/home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/common.rs:
+/home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out/dynamic.rs:
+
+# env-dep:OUT_DIR=/home/administrator/GitHub/log_manager/log_api/target/debug/build/clang-sys-6f482526d35992db/out

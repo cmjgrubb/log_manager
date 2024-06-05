@@ -36,5 +36,16 @@ impl Processor {
                 "message" => message
             }
         )
+
+        self.delete_old_logs(60)?;
+    }
+
+    pub fn delete_old_logs(&mut self, days: u32) -> Result<(), mysql::Error> {
+        self.conn.exec_drop(
+            r"DELETE FROM logs WHERE timestamp < DATE_SUB(NOW(), INTERVAL :days DAY)",
+            params! {
+                "days" => days
+            }
+        )
     }
 }
