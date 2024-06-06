@@ -1,0 +1,11 @@
+/home/administrator/GitHub/log_manager/log_api/target/debug/deps/libdotenvy-1d4f8fd41ff19b9e.rmeta: /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/lib.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/errors.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/find.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/iter.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/parse.rs
+
+/home/administrator/GitHub/log_manager/log_api/target/debug/deps/libdotenvy-1d4f8fd41ff19b9e.rlib: /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/lib.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/errors.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/find.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/iter.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/parse.rs
+
+/home/administrator/GitHub/log_manager/log_api/target/debug/deps/dotenvy-1d4f8fd41ff19b9e.d: /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/lib.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/errors.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/find.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/iter.rs /home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/parse.rs
+
+/home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/lib.rs:
+/home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/errors.rs:
+/home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/find.rs:
+/home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/iter.rs:
+/home/administrator/.cargo/registry/src/index.crates.io-6f17d22bba15001f/dotenvy-0.15.7/src/parse.rs:

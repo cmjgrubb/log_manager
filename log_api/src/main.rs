@@ -2,11 +2,12 @@
 
 use rocket::serde::json::Json;
 use rocket::State;
-use mysql::*;
+use sqlx::mysql::MySqlPool;
 use dotenv::dotenv;
 use std::env;
+use tokio::main;
 
-#[derive(serde::Serialize)]
+#[derive(serde::Serialize, sqlx::FromRow)]
 struct Log {
     timestamp: String,
     hostname: String,
@@ -15,47 +16,40 @@ struct Log {
 }
 
 #[get("/logs?<hostname>&<log_level>&<message>")]
-fn search_logs(
-    pool: &State<mysql::Pool>,
+async fn search_logs(
+    pool: &State<MySqlPool>,
     hostname: Option<String>,
     log_level: Option<String>,
     message: Option<String>,
 ) -> Json<Vec<Log>> {
-    let mut conn = pool.inner().get_conn().unwrap();
-
     let query = 
         "SELECT timestamp, hostname, log_level, message
         FROM logs
-        WHERE (? IS NULL OR hostname = ?)
-        AND (? IS NULL OR log_level = ?)
-        AND (? IS NULL OR message LIKE CONCAT('%', ?, '%'))";
+        WHERE (:hostname IS NULL OR hostname = :hostname)
+        AND (:log_level IS NULL OR log_level = :log_level)
+        AND (:message IS NULL OR message LIKE CONCAT('%', :message, '%'))";
 
-    let params = (&hostname, &hostname, &log_level, &log_level, &message, &message);
+    let rows = sqlx::query_as::<_, Log>(query)
+        .bind(&hostname)
+        .bind(&log_level)
+        .bind(&message)
+        .fetch_all(pool.inner()).await.unwrap();
 
-    let mut stmt = conn.prep(query).unwrap();
-    let result = stmt.execute(params).unwrap();
-
-    let logs: Vec<Log> = result.map(|row| {
-        let row = row.unwrap();
-        Log {
-            timestamp: row.get(0).unwrap(),
-            hostname: row.get(1).unwrap(),
-            log_level: row.get(2).unwrap(),
-            message: row.get(3).unwrap(),
-        }
-    }).collect();
-
-    Json(logs)
+    Json(rows)
 }
 
-fn main() {
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set");
-    let pool = Pool::new(database_url);
+    let pool = MySqlPool::connect(&database_url).await?;
 
     rocket::build()
         .manage(pool)
         .mount("/", routes![search_logs])
-        .launch();
+        .launch()
+        .await?;
+
+    Ok(())
 }
