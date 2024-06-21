@@ -1,6 +1,6 @@
 use dotenv::dotenv;
 use mysql::*;
-use mysql::prelude::*;
+use prelude::Queryable;
 use std::env;
 use regex::Regex;
 
@@ -13,7 +13,8 @@ impl Processor {
         dotenv().ok();
         let database_url = env::var("DATABASE_URL")
             .expect("DATABASE_URL must be set");
-        let pool = Pool::new(database_url)?;
+        let opts = Opts::from_url(&database_url).expect("Failed to parse database URL");
+        let pool = Pool::new(opts)?;
         let conn = pool.get_conn()?;
         Ok(Processor { conn })
     }
@@ -35,9 +36,11 @@ impl Processor {
                 "log_level" => log_level,
                 "message" => message
             }
-        )
-
+        )?;
+    
         self.delete_old_logs(60)?;
+    
+        Ok(())
     }
 
     pub fn delete_old_logs(&mut self, days: u32) -> Result<(), mysql::Error> {

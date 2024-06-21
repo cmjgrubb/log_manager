@@ -1,0 +1,1 @@
+/home/administrator/GitHub/log_manager/log_processor/target/debug/log_processor: /home/administrator/GitHub/log_manager/log_processor/src/listener.rs /home/administrator/GitHub/log_manager/log_processor/src/main.rs /home/administrator/GitHub/log_manager/log_processor/src/processor.rs

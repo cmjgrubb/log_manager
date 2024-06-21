@@ -2,8 +2,7 @@ use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::net::UdpSocket;
 use std::str;
-
-mod processor;
+use crate::processor::Processor;
 
 pub fn syslog() {
     let socket = UdpSocket::bind("0.0.0.0:514")
@@ -24,7 +23,13 @@ pub fn syslog() {
         }
     };
 
-    let mut processor = processor::Processor::new.unwrap();
+    let mut processor = match Processor::new() {
+        Ok(processor) => processor,
+        Err(e) => {
+            eprintln!("Failed to create processor: {e}");
+            return;
+        }
+    };
 
     loop {
         let mut buf = [0; 1024];
