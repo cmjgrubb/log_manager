@@ -57,7 +57,7 @@ DATABASE_URL=mysql://$DB_USER:$DB_PASS@localhost:3306/log_database
 EOL
 
 if [ ! -f .env ]; then
-    echo "Failed to create .env file"
+    echo "Failed to create .env file."
     exit 1
 fi
 
