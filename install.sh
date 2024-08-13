@@ -6,7 +6,7 @@ set -e
 if [ "$EUID" -ne 0 ]; then
   if [ -z "$SUDO_USER" ]; then
     echo "Please run as root or use sudo."
-    exit 1
+    exec sudo "$0" "$@"
   fi
 fi
 
