@@ -4,22 +4,24 @@ set -e
 
 # Check for root privileges
 if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root"
-  exit 1
+  if [ -z "$SUDO_USER" ]; then
+    echo "Please run as root or use sudo."
+    exit 1
+  fi
 fi
 
 # Check for required commands
-for cmd in apt-get curl git mysql; do
+for cmd in apt curl git mysql; do
   if ! command -v $cmd &> /dev/null; then
-    echo "$cmd could not be found"
+    echo "$cmd could not be found."
     exit 1
   fi
 done
 
 # Install dependencies
-sudo apt-get update && sudo apt-get install -y mariadb-server git || { echo "Failed to install dependencies"; exit 1; }
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust"; exit 1; }
-curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun"; exit 1; }
+sudo apt update && sudo apt install -y mariadb-server git || { echo "Failed to install dependencies."; exit 1; }
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
+curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
 
 # Download the project from GitHub
 sudo mkdir -p /log_manager
@@ -29,8 +31,8 @@ git clone https://github.com/cmjgrubb/log_manager.git . || { echo "Failed to clo
 
 # Build the project
 ## Database
-sudo systemctl start mariadb || { echo "Failed to start MariaDB"; exit 1; }
-sudo systemctl enable mariadb || { echo "Failed to enable MariaDB"; exit 1; }
+sudo systemctl start mariadb || { echo "Failed to start MariaDB."; exit 1; }
+sudo systemctl enable mariadb || { echo "Failed to enable MariaDB."; exit 1; }
 
 read -sp "Enter MariaDB root password: " ROOT_PASS
 echo
