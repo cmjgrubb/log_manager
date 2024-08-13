@@ -2,6 +2,19 @@
 
 set -e
 
+# Function to prompt for confirmation
+confirm() {
+    read -r -p "${1:-Are you sure? [y/N]} " response
+    case "$response" in
+        [yY][eE][sS]|[yY]) 
+            true
+            ;;
+        *)
+            false
+            ;;
+    esac
+}
+
 # Check for root privileges
 if [ "$EUID" -ne 0 ]; then
     echo "This script must be run with root privileges."
