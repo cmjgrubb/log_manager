@@ -41,7 +41,7 @@ fi
 # Remove Rust and Bun if installed
 if confirm "Do you want to remove Rust and Bun? [y/N]"; then
     if [ -d "$HOME/.cargo" ]; then
-        rm -rf "$HOME/.cargo"
+        rustup self uninstall
         echo "Removed Rust."
     else
         echo "Rust is not installed."

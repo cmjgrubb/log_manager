@@ -48,3 +48,23 @@ echo "Users, database, and table created successfully."
 cat <<EOL > .env
 DATABASE_URL="mysql://$DB_USER:$DB_PASS@localhost:3306/log_database"
 EOL
+
+echo ".env file created successfully."
+source .env
+
+## Log Processor
+cd log_processor
+cargo build --release || { echo "Failed to build log_processor"; exit 1; }
+cargo run --release || { echo "Failed to run log_processor"; exit 1; }
+cd ..
+
+## Log API
+cd log_api
+cargo build --release || { echo "Failed to build log_api"; exit 1; }
+cargo run --release || { echo "Failed to run log_api"; exit 1; }
+cd ..
+
+## Website
+cd website
+bun install || { echo "Failed to install website dependencies"; exit 1; }
+bun run || { echo "Failed to run website"; exit 1; }
