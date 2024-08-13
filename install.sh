@@ -9,7 +9,7 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Install dependencies
-sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip || { echo "Failed to install dependencies."; exit 1; }
+sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip build-essential || { echo "Failed to install dependencies."; exit 1; }
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 source $HOME/.cargo/env
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }

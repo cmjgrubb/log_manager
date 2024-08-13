@@ -30,8 +30,8 @@ else
 fi
 
 # Prompt for confirmation before removing dependencies
-if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip)? [y/N]"; then
-    sudo apt remove --purge -y mariadb-server mariadb-client git unzip
+if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip, build-essential)? [y/N]"; then
+    sudo apt remove --purge -y mariadb-server mariadb-client git unzip build-essential
     sudo apt autoremove -y
     echo "Removed dependencies."
 else
