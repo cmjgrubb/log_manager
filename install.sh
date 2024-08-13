@@ -10,7 +10,7 @@ fi
 
 
 # Install dependencies
-sudo apt update && sudo apt install -y mariadb-server mariadb-client git || { echo "Failed to install dependencies."; exit 1; }
+sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip || { echo "Failed to install dependencies."; exit 1; }
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
 
@@ -32,6 +32,7 @@ read -sp "Enter new MariaDB user password: " DB_PASS
 echo
 
 mysql -u root -p$ROOT_PASS -e "
+CREATE DATABASE IF NOT EXISTS log_database;
 CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
 GRANT ALL PRIVILEGES ON log_database.* TO '$DB_USER'@'localhost';
 FLUSH PRIVILEGES;
