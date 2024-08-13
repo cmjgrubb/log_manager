@@ -4,22 +4,13 @@ set -e
 
 # Check for root privileges
 if [ "$EUID" -ne 0 ]; then
-  if [ -z "$SUDO_USER" ]; then
-    echo "Please run as root or use sudo."
-    exec sudo "$0" "$@"
-  fi
+   echo "This script must be run with root privileges."
+   exit 1
 fi
 
-# Check for required commands
-for cmd in apt curl git mysql; do
-  if ! command -v $cmd &> /dev/null; then
-    echo "$cmd could not be found."
-    exit 1
-  fi
-done
 
 # Install dependencies
-sudo apt update && sudo apt install -y mariadb-server git || { echo "Failed to install dependencies."; exit 1; }
+sudo apt update && sudo apt install -y mariadb-server mariadb-client git || { echo "Failed to install dependencies."; exit 1; }
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
 
