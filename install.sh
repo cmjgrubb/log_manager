@@ -8,7 +8,6 @@ if [ "$EUID" -ne 0 ]; then
    exit 1
 fi
 
-
 # Install dependencies
 sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip || { echo "Failed to install dependencies."; exit 1; }
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
@@ -27,36 +26,25 @@ sudo systemctl enable mariadb || { echo "Failed to enable MariaDB."; exit 1; }
 
 read -sp "Enter MariaDB root password: " ROOT_PASS
 echo
-read -p "Enter new MariaDB service account username: " DB_USER
+read -p "Enter new MariaDB service account: " DB_USER
 read -sp "Enter new MariaDB user password: " DB_PASS
 echo
 
-mysql -u root -p$ROOT_PASS -e "
+mysql -u root -p"$ROOT_PASS" -e "
 CREATE DATABASE IF NOT EXISTS log_database;
 CREATE USER IF NOT EXISTS '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
 GRANT ALL PRIVILEGES ON log_database.* TO '$DB_USER'@'localhost';
 FLUSH PRIVILEGES;
-" || { echo "Failed to create service account or grant privileges."; exit 1; }
+" || { echo "Failed to create database, service account, or grant privileges."; exit 1; }
 
 if [ ! -f database/schema.sql ]; then
     echo "database/schema.sql file not found!"
     exit 1
 fi
 
-mysql -u $DB_USER -p$DB_PASS log_database < database/schema.sql || { echo "Failed to import database schema."; exit 1; }
+mysql -u "$DB_USER" -p"$DB_PASS" log_database < database/schema.sql || { echo "Failed to import database schema."; exit 1; }
 echo "Users, database, and table created successfully."
 
 cat <<EOL > .env
-DATABASE_URL=mysql://$DB_USER:$DB_PASS@localhost:3306/log_database
+DATABASE_URL="mysql://$DB_USER:$DB_PASS@localhost:3306/log_database"
 EOL
-
-if [ ! -f .env ]; then
-    echo "Failed to create .env file."
-    exit 1
-fi
-
-echo ".env file created successfully."
-source .env
-
-## Log Processor
-cd log_processor

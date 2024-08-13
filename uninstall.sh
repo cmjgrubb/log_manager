@@ -1,0 +1,47 @@
+#!/bin/bash
+
+set -e
+
+# Check for root privileges
+if [ "$EUID" -ne 0 ]; then
+    echo "This script must be run with root privileges."
+    exit 1
+fi
+
+# Remove the GitHub project
+if [ -d "/log_manager" ]; then
+    sudo rm -rf /log_manager
+    echo "Removed /log_manager directory."
+else
+    echo "/log_manager directory does not exist."
+fi
+
+# Prompt for confirmation before removing dependencies
+if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip)? [y/N]"; then
+    sudo apt remove --purge -y mariadb-server mariadb-client git unzip
+    sudo apt autoremove -y
+    echo "Removed dependencies."
+else
+    echo "Dependencies have not been removed."
+fi
+
+# Remove Rust and Bun if installed
+if confirm "Do you want to remove Rust and Bun? [y/N]"; then
+    if [ -d "$HOME/.cargo" ]; then
+        rm -rf "$HOME/.cargo"
+        echo "Removed Rust."
+    else
+        echo "Rust is not installed."
+    fi
+
+    if [ -d "$HOME/.bun" ]; then
+        rm -rf "$HOME/.bun"
+        echo "Removed Bun."
+    else
+        echo "Bun is not installed."
+    fi
+else
+    echo "Rust and Bun not removed."
+fi
+
+echo "Uninstallation complete."
