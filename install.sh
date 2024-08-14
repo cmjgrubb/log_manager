@@ -28,8 +28,8 @@ sudo systemctl enable mariadb || { echo "Failed to enable MariaDB."; exit 1; }
 
 read -sp "Enter MariaDB root password: " ROOT_PASS
 echo
-read -p "Enter new MariaDB service account: " DB_USER
-read -sp "Enter new MariaDB user password: " DB_PASS
+read -p "Enter new MariaDB service account username: " DB_USER
+read -sp "Enter new MariaDB service account password: " DB_PASS
 echo
 
 mysql -u root -p"$ROOT_PASS" -e "
