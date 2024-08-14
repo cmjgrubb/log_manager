@@ -30,23 +30,31 @@ else
 fi
 
 
+# Function to stop, disable, and remove a service if it exists
+remove_service() {
+    local service_name=$1
+    local service_file="/etc/systemd/system/${service_name}.service"
+
+    if [ -f "$service_file" ]; then
+        echo "Stopping ${service_name} service..."
+        sudo systemctl stop "${service_name}.service" || echo "Failed to stop ${service_name} service."
+
+        echo "Disabling ${service_name} service..."
+        sudo systemctl disable "${service_name}.service" || echo "Failed to disable ${service_name} service."
+
+        echo "Removing ${service_name} service file..."
+        sudo rm "$service_file" || echo "Failed to remove ${service_name} service file."
+    else
+        echo "${service_name} service is not installed."
+    fi
+}
+
 # Uninstall the services
-## Stop the services
-sudo systemctl stop log_processor.service
-sudo systemctl stop log_api.service
-sudo systemctl stop website.service
+remove_service "log_processor"
+remove_service "log_api"
+remove_service "website"
 
-## Disable the services
-sudo systemctl disable log_processor.service
-sudo systemctl disable log_api.service
-sudo systemctl disable website.service
-
-## Remove the service files
-sudo rm /etc/systemd/system/log_processor.service
-sudo rm /etc/systemd/system/log_api.service
-sudo rm /etc/systemd/system/website.service
-
-## Reload systemd to apply the changes
+# Reload systemd to apply the changes
 sudo systemctl daemon-reload
 
 echo "Services log_processor, log_api, and website have been uninstalled."
