@@ -13,7 +13,7 @@ sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip b
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 source $HOME/.cargo/env
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
-source $HOME/.bashrc
+source /root/.bashrc
 
 # Download the project from GitHub
 sudo mkdir -p /log_manager
@@ -57,16 +57,78 @@ source .env
 ## Log Processor
 cd log_processor
 cargo build --release || { echo "Failed to build log_processor"; exit 1; }
-cargo run --release || { echo "Failed to run log_processor"; exit 1; }
 cd ..
 
 ## Log API
 cd log_api
 cargo build --release || { echo "Failed to build log_api"; exit 1; }
-cargo run --release || { echo "Failed to run log_api"; exit 1; }
 cd ..
 
 ## Website
 cd website
 bun install || { echo "Failed to install website dependencies"; exit 1; }
-bun run || { echo "Failed to run website"; exit 1; }
+
+# Create systemd service files
+## Log Processor service
+sudo bash -c 'cat <<EOL > /etc/systemd/system/log_processor.service
+[Unit]
+Description=Log Processor Service
+After=network.target
+
+[Service]
+ExecStart=/log_manager/log_processor/target/release/log_processor
+WorkingDirectory=/log_manager/log_processor
+Restart=always
+User=$USER
+EnvironmentFile=/log_manager/.env
+
+[Install]
+WantedBy=multi-user.target
+EOL'
+
+## Log API service
+sudo bash -c 'cat <<EOL > /etc/systemd/system/log_api.service
+[Unit]
+Description=Log API Service
+After=network.target
+
+[Service]
+ExecStart=/log_manager/log_api/target/release/log_api
+WorkingDirectory=/log_manager/log_api
+Restart=always
+User=$USER
+EnvironmentFile=/log_manager/.env
+
+[Install]
+WantedBy=multi-user.target
+EOL'
+
+## Website service
+sudo bash -c 'cat <<EOL > /etc/systemd/system/website.service
+[Unit]
+Description=Website Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/bun run
+WorkingDirectory=/log_manager/website
+Restart=always
+User=$USER
+EnvironmentFile=/log_manager/.env
+
+[Install]
+WantedBy=multi-user.target
+EOL'
+
+## Reload systemd to apply the new service files
+sudo systemctl daemon-reload
+
+## Enable and start the services
+sudo systemctl enable log_processor.service
+sudo systemctl start log_processor.service
+
+sudo systemctl enable log_api.service
+sudo systemctl start log_api.service
+
+sudo systemctl enable website.service
+sudo systemctl start website.service

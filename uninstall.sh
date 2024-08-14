@@ -29,6 +29,28 @@ else
     echo "/log_manager directory does not exist."
 fi
 
+
+# Uninstall the services
+## Stop the services
+sudo systemctl stop log_processor.service
+sudo systemctl stop log_api.service
+sudo systemctl stop website.service
+
+## Disable the services
+sudo systemctl disable log_processor.service
+sudo systemctl disable log_api.service
+sudo systemctl disable website.service
+
+## Remove the service files
+sudo rm /etc/systemd/system/log_processor.service
+sudo rm /etc/systemd/system/log_api.service
+sudo rm /etc/systemd/system/website.service
+
+## Reload systemd to apply the changes
+sudo systemctl daemon-reload
+
+echo "Services log_processor, log_api, and website have been uninstalled."
+
 # Prompt for confirmation before removing dependencies
 if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip, build-essential, pkg-config, libssl-dev)? [y/N]"; then
     sudo apt remove --purge -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev
