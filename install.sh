@@ -13,7 +13,7 @@ sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip b
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 source $HOME/.cargo/env
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
-source /root/.bashrc
+sudo source /root/.bashrc
 
 # Download the project from GitHub
 sudo mkdir -p /log_manager
