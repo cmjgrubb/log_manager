@@ -5,7 +5,6 @@ use rocket::State;
 use sqlx::mysql::MySqlPool;
 use dotenv::dotenv;
 use std::env;
-use tokio::main;
 
 #[derive(serde::Serialize, sqlx::FromRow)]
 struct Log {
