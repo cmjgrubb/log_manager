@@ -110,7 +110,7 @@ Description=Website Service
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/bun run
+ExecStart=/root/.bun/bin/bun run
 WorkingDirectory=/log_manager/website
 Restart=always
 User=$USER
