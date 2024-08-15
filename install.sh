@@ -65,7 +65,7 @@ cargo build --release || { echo "Failed to build log_api"; exit 1; }
 ## Website
 cd /log_manager/website
 bun install || { echo "Failed to install website dependencies"; exit 1; }
-bun pm trust || { echo "Failed to run bun pm trust."; exit 1; }
+bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
 
 # Create systemd service files
 ## Log Processor service
