@@ -70,6 +70,7 @@ fi
 
 # Remove Rust and Bun if installed
 if confirm "Do you want to remove Rust and Bun? [y/N]"; then
+    cd $HOME
     if [ -d "$HOME/.cargo" ]; then
         source $HOME/.cargo/env
         rustup self uninstall
