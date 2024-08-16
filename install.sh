@@ -15,9 +15,17 @@ source $HOME/.cargo/env
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
 export PATH="$HOME/.bun/bin:$PATH"
 
+# Create a dedicated service account and group
+sudo groupadd -r log_manager || { echo "Failed to create service group."; exit 1; }
+sudo useradd -r -g log_manager -s /bin/false log_manager || { echo "Failed to create service account."; exit 1; }
+
+# Add the current user to the logmanager group
+sudo usermod -aG log_manager $USER || { echo "Failed to add user to logmanager group."; exit 1; }
+
 # Download the project from GitHub
 sudo mkdir -p /log_manager
-sudo chown $USER:$USER /log_manager
+sudo chown logmanager:logmanager /log_manager
+sudo chmod 770 /log_manager
 cd /log_manager
 git clone https://github.com/cmjgrubb/log_manager.git . || { echo "Failed to clone GitHub repository"; exit 1; }
 
@@ -65,7 +73,10 @@ cargo build --release || { echo "Failed to build log_api"; exit 1; }
 ## Website
 cd /log_manager/website
 bun install || { echo "Failed to install website dependencies"; exit 1; }
-bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
+sudo bun install pm2 -g || { echo "Failed to install PM2"; exit 1; }
+export PATH="/root/.bun/bin:$PATH" || { echo "Failed to add Bun to PATH"; exit 1; }
+pm2 start --interpreter ~/.bun/bin/bun index.ts || { echo "Failed to start website"; exit 1; }
+#bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
 
 # Create systemd service files
 ## Log Processor service
@@ -78,7 +89,7 @@ After=network.target
 ExecStart=/log_manager/log_processor/target/release/log_processor
 WorkingDirectory=/log_manager/log_processor
 Restart=always
-User=$USER
+User=log_manager
 EnvironmentFile=/log_manager/.env
 
 [Install]
@@ -95,7 +106,7 @@ After=network.target
 ExecStart=/log_manager/log_api/target/release/log_api
 WorkingDirectory=/log_manager/log_api
 Restart=always
-User=$USER
+User=log_manager
 EnvironmentFile=/log_manager/.env
 
 [Install]
@@ -103,21 +114,21 @@ WantedBy=multi-user.target
 EOL'
 
 ## Website service
-sudo bash -c 'cat <<EOL > /etc/systemd/system/website.service
-[Unit]
-Description=Website Service
-After=network.target
+#sudo bash -c 'cat <<EOL > /etc/systemd/system/website.service
+#[Unit]
+#Description=Website Service
+#After=network.target
 
-[Service]
-ExecStart=/root/.bun/bin/bun run
-WorkingDirectory=/log_manager/website
-Restart=always
-User=$USER
-EnvironmentFile=/log_manager/.env
+#[Service]
+#ExecStart=/root/.bun/bin/bun run
+#WorkingDirectory=/log_manager/website
+#Restart=always
+#User=$USER
+#EnvironmentFile=/log_manager/.env
 
-[Install]
-WantedBy=multi-user.target
-EOL'
+#[Install]
+#WantedBy=multi-user.target
+#EOL'
 
 ## Reload systemd to apply the new service files
 sudo systemctl daemon-reload
@@ -129,5 +140,5 @@ sudo systemctl start log_processor.service
 sudo systemctl enable log_api.service
 sudo systemctl start log_api.service
 
-sudo systemctl enable website.service
-sudo systemctl start website.service
+#sudo systemctl enable website.service
+#sudo systemctl start website.service
