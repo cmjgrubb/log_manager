@@ -19,12 +19,12 @@ export PATH="$HOME/.bun/bin:$PATH"
 sudo groupadd -r log_manager || { echo "Failed to create service group."; exit 1; }
 sudo useradd -r -g log_manager -s /bin/false log_manager || { echo "Failed to create service account."; exit 1; }
 
-# Add the current user to the logmanager group
-sudo usermod -aG log_manager $USER || { echo "Failed to add user to logmanager group."; exit 1; }
+# Add the current user to the log_manager group
+sudo usermod -aG log_manager $USER || { echo "Failed to add user to log_manager group."; exit 1; }
 
 # Download the project from GitHub
 sudo mkdir -p /log_manager
-sudo chown logmanager:logmanager /log_manager
+sudo chown log_manager:log_manager /log_manager
 sudo chmod 770 /log_manager
 cd /log_manager
 git clone https://github.com/cmjgrubb/log_manager.git . || { echo "Failed to clone GitHub repository"; exit 1; }
