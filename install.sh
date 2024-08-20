@@ -13,7 +13,9 @@ sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip b
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 source $HOME/.cargo/env
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
-export PATH="$HOME/.bun/bin:$PATH"
+sudo mv /root/.bun/bin/bun /usr/local/bin/ || { echo "Failed to move Bun to /usr/local/bin."; exit 1; }
+sudo chmod a+x /usr/local/bin/bun || { echo "Failed to update Bun permissions."; exit 1; }
+sudo rm -rf /root/.bun || { echo "Failed to remove /root/.bun directory."; exit 1; }
 
 # Create a dedicated service account and group
 if ! getent group log_manager > /dev/null; then
@@ -83,8 +85,7 @@ cargo build --release || { echo "Failed to build log_api"; exit 1; }
 cd /log_manager/website
 bun install || { echo "Failed to install website dependencies"; exit 1; }
 sudo bun install pm2 -g || { echo "Failed to install PM2"; exit 1; }
-bun run build
-export PATH="/root/.bun/bin:$PATH" || { echo "Failed to add Bun to PATH"; exit 1; }
+bun run build || { echo "Failed to build website"; exit 1; }
 pm2 start --interpreter ~/.bun/bin/bun /log_manager/website/build/index.js || { echo "Failed to start website"; exit 1; }
 #bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
 

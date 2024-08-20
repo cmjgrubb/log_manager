@@ -79,8 +79,8 @@ if confirm "Do you want to remove Rust and Bun? [y/N]"; then
         echo "Rust is not installed."
     fi
 
-    if [ -d "$HOME/.bun" ]; then
-        rm -rf "$HOME/.bun"
+    if [ -d "/usr/local/bin/bun" ]; then
+        rm -rf "/usr/local/bin/bun"
         echo "Removed Bun."
     else
         echo "Bun is not installed."
