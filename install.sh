@@ -16,8 +16,17 @@ curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exi
 export PATH="$HOME/.bun/bin:$PATH"
 
 # Create a dedicated service account and group
-sudo groupadd -r log_manager || { echo "Failed to create service group."; exit 1; }
-sudo useradd -r -g log_manager -s /bin/false log_manager || { echo "Failed to create service account."; exit 1; }
+if ! getent group log_manager > /dev/null; then
+    sudo groupadd -r log_manager || { echo "Failed to create service group."; exit 1; }
+else
+    echo "Group log_manager already exists."
+fi
+
+if ! id -u log_manager > /dev/null 2>&1; then
+    sudo useradd -r -g log_manager -s /bin/false log_manager || { echo "Failed to create service account."; exit 1; }
+else
+    echo "User log_manager already exists."
+fi
 
 # Add the current user to the log_manager group
 sudo usermod -aG log_manager $USER || { echo "Failed to add user to log_manager group."; exit 1; }
