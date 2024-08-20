@@ -52,12 +52,11 @@ remove_service() {
 # Uninstall the services
 remove_service "log_processor"
 remove_service "log_api"
-remove_service "website"
 
 # Reload systemd to apply the changes
 sudo systemctl daemon-reload
 
-echo "Services log_processor, log_api, and website have been uninstalled."
+echo "Services log_processor and log_api have been uninstalled."
 
 # Prompt for confirmation before removing dependencies
 if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip, build-essential, pkg-config, libssl-dev)? [y/N]"; then
@@ -68,7 +67,7 @@ else
     echo "Dependencies have not been removed."
 fi
 
-# Remove Rust and Bun if installed
+# Remove NVM, Rust, and Bun if installed
 if confirm "Do you want to remove Rust and Bun? [y/N]"; then
     cd $HOME
     if [ -d "$HOME/.cargo" ]; then
@@ -81,6 +80,12 @@ if confirm "Do you want to remove Rust and Bun? [y/N]"; then
 
     if [ -d "/usr/local/bin/bun" ]; then
         rm -rf "/usr/local/bin/bun"
+        echo "Removed Bun."
+    else
+        echo "Bun is not installed."
+    fi
+    if [ -d "/usr/local/bin/nvm" ]; then
+        rm -rf "/usr/local/bin/nvm"
         echo "Removed Bun."
     else
         echo "Bun is not installed."
