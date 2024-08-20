@@ -17,6 +17,7 @@ sudo mv /root/.bun/bin/bun /usr/local/bin/ || { echo "Failed to move Bun to /usr
 sudo chmod a+x /usr/local/bin/bun || { echo "Failed to update Bun permissions."; exit 1; }
 sudo rm -rf /root/.bun || { echo "Failed to remove /root/.bun directory."; exit 1; }
 sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash | NVM_DIR="/usr/local/bin/nvm" || { echo "Failed to install NVM."; exit 1; }
+nvm install 22 || { echo "Failed to install Node.js."; exit 1; }
 
 # Create a dedicated service account and group
 if ! getent group log_manager > /dev/null; then
