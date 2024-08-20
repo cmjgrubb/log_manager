@@ -74,8 +74,9 @@ cargo build --release || { echo "Failed to build log_api"; exit 1; }
 cd /log_manager/website
 bun install || { echo "Failed to install website dependencies"; exit 1; }
 sudo bun install pm2 -g || { echo "Failed to install PM2"; exit 1; }
+bun run build
 export PATH="/root/.bun/bin:$PATH" || { echo "Failed to add Bun to PATH"; exit 1; }
-pm2 start --interpreter ~/.bun/bin/bun index.ts || { echo "Failed to start website"; exit 1; }
+pm2 start --interpreter ~/.bun/bin/bun /log_manager/website/build/index.js || { echo "Failed to start website"; exit 1; }
 #bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
 
 # Create systemd service files
