@@ -76,18 +76,20 @@ source .env
 
 ## Log Processor
 cd /log_manager/log_processor
-cargo build --release || { echo "Failed to build log_processor"; exit 1; }
+cargo build --release || { echo "Failed to build log_processor."; exit 1; }
 
 ## Log API
 cd /log_manager/log_api
-cargo build --release || { echo "Failed to build log_api"; exit 1; }
+cargo build --release || { echo "Failed to build log_api."; exit 1; }
 
 ## Website
 cd /log_manager/website
-bun install || { echo "Failed to install website dependencies"; exit 1; }
+bun install || { echo "Failed to install website dependencies."; exit 1; }
 sudo bun install pm2 -g || { echo "Failed to install PM2"; exit 1; }
-bun run build || { echo "Failed to build website"; exit 1; }
-pm2 start --interpreter ~/.bun/bin/bun /log_manager/website/build/index.js || { echo "Failed to start website"; exit 1; }
+echo 'export PATH="$HOME/.bun/bin:$PATH"' >> ~/.bashrc || { echo "Failed to update PATH."; exit 1; }
+source ~/.bashrc || { echo "Failed to source bashrc."; exit 1; }
+bun run build || { echo "Failed to build website."; exit 1; }
+pm2 start --interpreter ~/.bun/bin/bun /log_manager/website/build/index.js || { echo "Failed to start website."; exit 1; }
 #bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
 
 # Create systemd service files
