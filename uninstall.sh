@@ -52,6 +52,7 @@ remove_service() {
 # Uninstall the services
 remove_service "log_processor"
 remove_service "log_api"
+remove_service "website"
 
 # Reload systemd to apply the changes
 sudo systemctl daemon-reload

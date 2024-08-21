@@ -84,13 +84,10 @@ cargo build --release || { echo "Failed to build log_api."; exit 1; }
 
 ## Website
 cd /log_manager/website
+bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
 bun install || { echo "Failed to install website dependencies."; exit 1; }
-sudo bun install pm2 -g || { echo "Failed to install PM2"; exit 1; }
-echo 'export PATH="$HOME/.bun/bin:$PATH"' >> ~/.bashrc || { echo "Failed to update PATH."; exit 1; }
-source ~/.bashrc || { echo "Failed to source bashrc."; exit 1; }
 bun run build || { echo "Failed to build website."; exit 1; }
-pm2 start --interpreter ~/.bun/bin/bun /log_manager/website/build/index.js || { echo "Failed to start website."; exit 1; }
-#bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
+
 
 # Create systemd service files
 ## Log Processor service
@@ -128,21 +125,21 @@ WantedBy=multi-user.target
 EOL'
 
 ## Website service
-#sudo bash -c 'cat <<EOL > /etc/systemd/system/website.service
-#[Unit]
-#Description=Website Service
-#After=network.target
+sudo bash -c 'cat <<EOL > /etc/systemd/system/website.service
+[Unit]
+Description=Website Service
+After=network.target
 
-#[Service]
-#ExecStart=/root/.bun/bin/bun run
-#WorkingDirectory=/log_manager/website
-#Restart=always
-#User=$USER
-#EnvironmentFile=/log_manager/.env
+[Service]
+ExecStart=/usr/local/bin/bun run
+WorkingDirectory=/log_manager/website
+Restart=always
+User=$USER
+EnvironmentFile=/log_manager/.env
 
-#[Install]
-#WantedBy=multi-user.target
-#EOL'
+[Install]
+WantedBy=multi-user.target
+EOL'
 
 ## Reload systemd to apply the new service files
 sudo systemctl daemon-reload
@@ -154,5 +151,5 @@ sudo systemctl start log_processor.service
 sudo systemctl enable log_api.service
 sudo systemctl start log_api.service
 
-#sudo systemctl enable website.service
-#sudo systemctl start website.service
+sudo systemctl enable website.service
+sudo systemctl start website.service
