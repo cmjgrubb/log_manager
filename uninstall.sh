@@ -59,12 +59,12 @@ sudo systemctl daemon-reload
 echo "Services log_processor and log_api have been uninstalled."
 
 # Prompt for confirmation before removing dependencies
-if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip, build-essential, pkg-config, libssl-dev)? [y/N]"; then
-    sudo apt remove --purge -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev
+if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip, build-essential, pkg-config, libssl-dev, nodejs)? [y/N]"; then
+    sudo apt remove --purge -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev nodejs || { echo "Failed to remove apt dependencies."; exit 1; }
     sudo apt autoremove -y
-    echo "Removed dependencies."
+    echo "Removed apt dependencies."
 else
-    echo "Dependencies have not been removed."
+    echo "Apt dependencies have not been removed."
 fi
 
 # Remove NVM, Rust, and Bun if installed

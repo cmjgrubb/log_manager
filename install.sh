@@ -9,15 +9,14 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Install dependencies
-sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev || { echo "Failed to install dependencies."; exit 1; }
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - || { echo "Failed to install add Nodesource repository."; exit 1; }
+sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev nodejs || { echo "Failed to install dependencies."; exit 1; }
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 source $HOME/.cargo/env
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
 sudo mv /root/.bun/bin/bun /usr/local/bin/ || { echo "Failed to move Bun to /usr/local/bin."; exit 1; }
 sudo chmod a+x /usr/local/bin/bun || { echo "Failed to update Bun permissions."; exit 1; }
 sudo rm -rf /root/.bun || { echo "Failed to remove /root/.bun directory."; exit 1; }
-sudo curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash | NVM_DIR="/usr/local/bin/nvm" || { echo "Failed to install NVM."; exit 1; }
-nvm install 22 || { echo "Failed to install Node.js."; exit 1; }
 
 # Create a dedicated service account and group
 if ! getent group log_manager > /dev/null; then
