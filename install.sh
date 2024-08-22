@@ -84,8 +84,8 @@ cargo build --release || { echo "Failed to build log_api."; exit 1; }
 
 ## Website
 cd /log_manager/website
-bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
 bun install || { echo "Failed to install website dependencies."; exit 1; }
+bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
 bun run build || { echo "Failed to build website."; exit 1; }
 
 
