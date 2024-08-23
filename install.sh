@@ -11,8 +11,10 @@ fi
 # Install dependencies
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - || { echo "Failed to install add Nodesource repository."; exit 1; }
 sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev nodejs || { echo "Failed to install dependencies."; exit 1; }
+export RUSTUP_HOME=/usr/local/bin/rustup
+export CARGO_HOME=/usr/local/bin/cargo
+export PATH=/usr/local/bin/cargo/bin:$PATH
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
-source $HOME/.cargo/env
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
 sudo mv /root/.bun/bin/bun /usr/local/bin/ || { echo "Failed to move Bun to /usr/local/bin."; exit 1; }
 sudo chmod a+x /usr/local/bin/bun || { echo "Failed to update Bun permissions."; exit 1; }
@@ -76,11 +78,11 @@ source .env
 
 ## Log Processor
 cd /log_manager/log_processor
-sudo -E -u log_manager cargo build --release || { echo "Failed to build log_processor."; exit 1; }
+sudo -u log_manager cargo build --release || { echo "Failed to build log_processor."; exit 1; }
 
 ## Log API
 cd /log_manager/log_api
-sudo -E -u log_manager cargo build --release || { echo "Failed to build log_api."; exit 1; }
+sudo -u log_manager cargo build --release || { echo "Failed to build log_api."; exit 1; }
 
 ## Website
 cd /log_manager/website

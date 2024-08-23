@@ -71,8 +71,7 @@ fi
 # Remove NVM, Rust, and Bun if installed
 if confirm "Do you want to remove Rust and Bun? [y/N]"; then
     cd $HOME
-    if [ -d "$HOME/.cargo" ]; then
-        source $HOME/.cargo/env
+    if [ -d "/usr/local/bin/cargo" ]; then
         rustup self uninstall
         echo "Removed Rust."
     else
