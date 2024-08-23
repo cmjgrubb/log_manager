@@ -9,11 +9,14 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 # Install dependencies
-sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev || { echo "Failed to install dependencies."; exit 1; }
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - || { echo "Failed to install add Nodesource repository."; exit 1; }
+sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev nodejs || { echo "Failed to install dependencies."; exit 1; }
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 source $HOME/.cargo/env
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
-export PATH="$HOME/.bun/bin:$PATH"
+sudo mv /root/.bun/bin/bun /usr/local/bin/ || { echo "Failed to move Bun to /usr/local/bin."; exit 1; }
+sudo chmod a+x /usr/local/bin/bun || { echo "Failed to update Bun permissions."; exit 1; }
+sudo rm -rf /root/.bun || { echo "Failed to remove /root/.bun directory."; exit 1; }
 
 # Create a dedicated service account and group
 if ! getent group log_manager > /dev/null; then
@@ -31,9 +34,6 @@ fi
 # Add the current user to the log_manager group
 sudo usermod -aG log_manager $USER || { echo "Failed to add user to log_manager group."; exit 1; }
 
-# Ensure the current user is in the log_manager group
-newgrp log_manager
-
 # Download the project from GitHub
 sudo mkdir -p /log_manager
 sudo chown log_manager:log_manager /log_manager
@@ -46,9 +46,9 @@ sudo -u log_manager git clone https://github.com/cmjgrubb/log_manager.git . || {
 sudo systemctl start mariadb || { echo "Failed to start MariaDB."; exit 1; }
 sudo systemctl enable mariadb || { echo "Failed to enable MariaDB."; exit 1; }
 
-read - "Enter MariaDB root password: " ROOT_PASS
+read -sp "Enter MariaDB root password: " ROOT_PASS
 echo
-read -p "Enter new MariaDB service account: " DB_USER
+read -p "Enter new MariaDB service account username: " DB_USER
 read -sp "Enter new MariaDB service account password: " DB_PASS
 echo
 
@@ -76,17 +76,18 @@ source .env
 
 ## Log Processor
 cd /log_manager/log_processor
-sudo -u log_manager cargo build --release || { echo "Failed to build log_processor"; exit 1; }
+sudo -u log_manager cargo build --release || { echo "Failed to build log_processor."; exit 1; }
 
 ## Log API
 cd /log_manager/log_api
-sudo -u log_manager cargo build --release || { echo "Failed to build log_api"; exit 1; }
+sudo -u log_manager cargo build --release || { echo "Failed to build log_api."; exit 1; }
 
 ## Website
 cd /log_manager/website
-sudo -u log_manager bun install || { echo "Failed to install website dependencies"; exit 1; }
+sudo -u log_manager bun install || { echo "Failed to install website dependencies."; exit 1; }
 sudo -u log_manager bun pm trust --all || { echo "Failed to run bun pm trust."; exit 1; }
-sudo -u log_manager bun run build || { echo "Failed to build website"; exit 1; }
+sudo -u log_manager bun run build || { echo "Failed to build website."; exit 1; }
+
 
 # Create systemd service files
 ## Log Processor service
@@ -130,7 +131,7 @@ Description=Website Service
 After=network.target
 
 [Service]
-ExecStart=/root/.bun/bin/bun run
+ExecStart=/usr/local/bin/bun run
 WorkingDirectory=/log_manager/website
 Restart=always
 User=log_manager
@@ -144,13 +145,18 @@ EOL'
 sudo chown -R log_manager:log_manager /log_manager
 sudo chmod -R 770 /log_manager
 
-# Enable and start the services
+## Reload systemd to apply the new service files
 sudo systemctl daemon-reload
+
+## Enable and start the services
 sudo systemctl enable log_processor.service
 sudo systemctl start log_processor.service
+
 sudo systemctl enable log_api.service
 sudo systemctl start log_api.service
+
 sudo systemctl enable website.service
 sudo systemctl start website.service
 
+echo "Services log_processor, log_api, and website have been installed and started."
 echo "Installation and setup completed successfully."
