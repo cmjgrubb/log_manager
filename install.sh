@@ -76,11 +76,11 @@ source .env
 
 ## Log Processor
 cd /log_manager/log_processor
-sudo -u log_manager cargo build --release || { echo "Failed to build log_processor."; exit 1; }
+sudo -E -u log_manager cargo build --release || { echo "Failed to build log_processor."; exit 1; }
 
 ## Log API
 cd /log_manager/log_api
-sudo -u log_manager cargo build --release || { echo "Failed to build log_api."; exit 1; }
+sudo -E -u log_manager cargo build --release || { echo "Failed to build log_api."; exit 1; }
 
 ## Website
 cd /log_manager/website

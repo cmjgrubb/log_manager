@@ -97,6 +97,7 @@ fi
 
 # Remove the log_manager user and group
 if id "log_manager" &>/dev/null; then
+    sudo gpasswd -d $USER log_manager || echo "Failed to remove $USER from log_manager group."
     sudo userdel log_manager || { echo "Failed to delete log_manager user."; exit 1; }
 else
     echo "User log_manager does not exist."
