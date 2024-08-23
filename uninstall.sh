@@ -69,14 +69,8 @@ else
 fi
 
 # Remove NVM, Rust, and Bun if installed
-if confirm "Do you want to remove Rust and Bun? [y/N]"; then
+if confirm "Do you want to remove Bun? [y/N]"; then
     cd $HOME
-    #if [ -d "/usr/local/bin/cargo" ]; then
-    #    rustup self uninstall
-    #    echo "Removed Rust."
-    #else
-    #    echo "Rust is not installed."
-    #fi
 
     if [ -d "/usr/local/bin/bun" ]; then
         rm -rf "/usr/local/bin/bun"
@@ -84,14 +78,9 @@ if confirm "Do you want to remove Rust and Bun? [y/N]"; then
     else
         echo "Bun is not installed."
     fi
-    if [ -d "/usr/local/bin/nvm" ]; then
-        rm -rf "/usr/local/bin/nvm"
-        echo "Removed Bun."
-    else
-        echo "Bun is not installed."
-    fi
+
 else
-    echo "Rust and Bun not removed."
+    echo "Bun not removed."
 fi
 
 # Remove the log_manager user and group
