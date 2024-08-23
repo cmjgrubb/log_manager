@@ -108,4 +108,12 @@ else
     echo "Group log_manager does not exist."
 fi
 
+# Remove the log_manager service user home directory
+if [ -d "/home/log_manager" ]; then
+    sudo rm -rf /home/log_manager
+    echo "Removed /home/log_manager directory."
+else
+    echo "/home/log_manager directory does not exist."
+fi
+
 echo "Uninstallation complete."

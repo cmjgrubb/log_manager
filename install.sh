@@ -76,6 +76,10 @@ EOL
 echo ".env file created successfully."
 source .env
 
+## Set up .cargo directory in home of log_manager service account
+sudo mkdir -p /home/log_manager/.cargo
+sudo chown -R log_manager:log_manager /home/log_manager/.cargo
+
 ## Log Processor
 cd /log_manager/log_processor
 sudo -u log_manager cargo build --release || { echo "Failed to build log_processor."; exit 1; }
