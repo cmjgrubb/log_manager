@@ -137,7 +137,7 @@ Description=Website Service
 After=network.target
 
 [Service]
-ExecStart=/usr/local/bin/bun run
+ExecStart=/usr/local/bin/bun ./build/index.js
 WorkingDirectory=/log_manager/website
 Restart=always
 User=log_manager
