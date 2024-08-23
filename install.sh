@@ -10,11 +10,11 @@ fi
 
 # Install dependencies
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash - || { echo "Failed to install add Nodesource repository."; exit 1; }
-sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev nodejs || { echo "Failed to install dependencies."; exit 1; }
-export RUSTUP_HOME=/usr/local/bin/rustup
-export CARGO_HOME=/usr/local/bin/cargo
-export PATH=/usr/local/bin/cargo/bin:$PATH
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
+sudo apt update && sudo apt install -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev nodejs rustc cargo || { echo "Failed to install dependencies."; exit 1; }
+#export RUSTUP_HOME=/usr/local/bin/rustup
+#export CARGO_HOME=/usr/local/bin/cargo
+#export PATH=/usr/local/bin/cargo/bin:$PATH
+#curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y || { echo "Failed to install Rust."; exit 1; }
 curl -fsSL https://bun.sh/install | bash || { echo "Failed to install Bun."; exit 1; }
 sudo mv /root/.bun/bin/bun /usr/local/bin/ || { echo "Failed to move Bun to /usr/local/bin."; exit 1; }
 sudo chmod a+x /usr/local/bin/bun || { echo "Failed to update Bun permissions."; exit 1; }

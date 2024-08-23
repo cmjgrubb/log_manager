@@ -60,8 +60,8 @@ sudo systemctl daemon-reload
 echo "Services log_processor and log_api have been uninstalled."
 
 # Prompt for confirmation before removing dependencies
-if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip, build-essential, pkg-config, libssl-dev, nodejs)? [y/N]"; then
-    sudo apt remove --purge -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev nodejs || { echo "Failed to remove apt dependencies."; exit 1; }
+if confirm "Do you want to remove the installed dependencies (mariadb-server, mariadb-client, git, unzip, build-essential, pkg-config, libssl-dev, nodejs, rustc, cargo)? [y/N]"; then
+    sudo apt remove --purge -y mariadb-server mariadb-client git unzip build-essential pkg-config libssl-dev nodejs rustc cargo || { echo "Failed to remove apt dependencies."; exit 1; }
     sudo apt autoremove -y
     echo "Removed apt dependencies."
 else
@@ -71,12 +71,12 @@ fi
 # Remove NVM, Rust, and Bun if installed
 if confirm "Do you want to remove Rust and Bun? [y/N]"; then
     cd $HOME
-    if [ -d "/usr/local/bin/cargo" ]; then
-        rustup self uninstall
-        echo "Removed Rust."
-    else
-        echo "Rust is not installed."
-    fi
+    #if [ -d "/usr/local/bin/cargo" ]; then
+    #    rustup self uninstall
+    #    echo "Removed Rust."
+    #else
+    #    echo "Rust is not installed."
+    #fi
 
     if [ -d "/usr/local/bin/bun" ]; then
         rm -rf "/usr/local/bin/bun"
