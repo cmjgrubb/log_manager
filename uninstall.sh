@@ -83,6 +83,13 @@ else
     echo "Bun not removed."
 fi
 
+# Remove log file
+if [ -f /var/log/log_manager ]; then
+    sudo rm -f /var/log/log_manager || echo "Failed to remove log file."
+else
+    echo "Log file does not exist."
+fi
+
 # Remove the log_manager user and group
 if id "log_manager" &>/dev/null; then
     sudo gpasswd -d $USER log_manager || echo "Failed to remove $USER from log_manager group."

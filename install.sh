@@ -147,6 +147,11 @@ EOL'
 sudo chown -R log_manager:log_manager /log_manager
 sudo chmod -R 770 /log_manager
 
+# Create log file for the log_manager application
+sudo touch /var/log/log_manager
+sudo chown log_manager:log_manager /var/log/log_manager
+sudo chmod 644 /var/log/log_manager
+
 ## Reload systemd to apply the new service files
 sudo systemctl daemon-reload
 
