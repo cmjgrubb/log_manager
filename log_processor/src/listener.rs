@@ -1,45 +1,89 @@
-use std::fs::OpenOptions;
-use std::io::prelude::*;
-use std::net::UdpSocket;
+use std::net::{SocketAddr, TcpListener, UdpSocket};
 use std::str;
-use crate::processor::Processor;
+use std::sync::Arc;
+use tokio::sync::Mutex;
+use tokio::task;
+use tokio::io::AsyncReadExt;
+use sqlx::mysql::MySqlPool;
 
-pub fn syslog() {
-    let socket = UdpSocket::bind("0.0.0.0:514")
-        .expect("Could not bind to port 514. Ensure that this program is run as sudo.");
+#[derive(Clone)]
+pub struct Processor {
+    db_pool: Arc<MySqlPool>,
+}
 
-    let file = OpenOptions::new()
-        .write(true)
-        .append(true)
-        .open("/var/log/log_manager");
+impl Processor {
+    pub async fn new(database_url: &str) -> Result<Self, Box<dyn std::error::Error>> {
+        let db_pool = MySqlPool::connect(database_url).await?;
 
-    let mut file = match file {
-        Ok(file) => file,
-        Err(e) => {
-            eprintln!(
-                "Error opening log file: {e}.\nPlease check file permissions, ownership, and path."
-            );
-            return;
-        }
-    };
+        Ok(Processor {
+            db_pool: Arc::new(db_pool),
+        })
+    }
 
-    let mut processor = match Processor::new() {
+    pub async fn process_log(&self, log: &str) -> Result<(), Box<dyn std::error::Error>> {
+        sqlx::query("INSERT INTO syslogs (message) VALUES (?)")
+            .bind(log)
+            .execute(&*self.db_pool)
+            .await?;
+        Ok(())
+    }
+}
+
+pub async fn syslog() -> Result<(), Box<dyn std::error::Error>> {
+    let addr: SocketAddr = "0.0.0.0:514".parse()?;
+    let tcp_listener = TcpListener::bind(&addr)?;
+    let udp_listener = UdpSocket::bind(&addr)?;
+
+    let processor = match Processor::new("mysql://user:password@localhost/database").await {
         Ok(processor) => processor,
         Err(e) => {
             eprintln!("Failed to create processor: {e}");
-            return;
+            return Ok(());
         }
     };
 
+    let tcp_task = tokio::spawn({
+        let processor = processor.clone();
+        async move {
+            loop {
+                let (socket, _) = tcp_listener.accept()?;
+                let processor = processor.clone();
+                tokio::spawn(async move {
+                    handle_tcp_connection(socket, processor).await;
+                });
+            }
+        }
+    });
+
+    let udp_task = tokio::spawn({
+        let processor = processor.clone();
+        async move {
+            let mut buf = [0; 1024];
+            loop {
+                let (len, addr) = udp_listener.recv_from(&mut buf)?;
+                let text = str::from_utf8_lossy(&buf[..len]);
+                processor.process_log(&text).await.unwrap();
+            }
+        }
+    });
+
+    Ok(())
+}
+
+async fn handle_tcp_connection(mut socket: tokio::net::TcpStream, processor: Processor) {
+    let mut buf = vec![0; 1024];
     loop {
-        let mut buf = [0; 1024];
-        match socket.recv_from(&mut buf) {
-            Ok((amt, _src)) => {
-                let text = str::from_utf8(&buf[..amt]).unwrap();
-                processor.process_log(text).unwrap();
+        match socket.read(&mut buf).await {
+            Ok(0) => break,
+            Ok(len) => {
+                let msg = String::from_utf8_lossy(&buf[..len]);
+                if let Err(e) = processor.process_log(&msg).await {
+                    eprintln!("Failed to process log message: {:?}", e);
+                }
             }
             Err(e) => {
-                writeln!(file, "Error receiving log: {e}").unwrap();
+                eprintln!("Failed to read from socket; err = {:?}", e);
+                break;
             }
         }
     }
