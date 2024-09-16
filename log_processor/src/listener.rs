@@ -1,10 +1,8 @@
+use sqlx::mysql::MySqlPool;
 use std::net::{SocketAddr, TcpListener, UdpSocket};
 use std::str;
 use std::sync::Arc;
-use tokio::sync::Mutex;
-use tokio::task;
 use tokio::io::AsyncReadExt;
-use sqlx::mysql::MySqlPool;
 
 #[derive(Clone)]
 pub struct Processor {
