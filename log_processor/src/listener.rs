@@ -3,29 +3,31 @@ use std::net::{SocketAddr, TcpListener, UdpSocket};
 use std::str;
 use std::sync::Arc;
 use tokio::io::AsyncReadExt;
+use tokio::net::TcpStream;
+use tokio::task;
 
-#[derive(Clone)]
-pub struct Processor {
-    db_pool: Arc<MySqlPool>,
-}
+// #[derive(Clone)]
+// pub struct Processor {
+//     db_pool: Arc<MySqlPool>,
+// }
 
-impl Processor {
-    pub async fn new(database_url: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        let db_pool = MySqlPool::connect(database_url).await?;
+// impl Processor {
+//     pub async fn new(database_url: &str) -> Result<Self, Box<dyn std::error::Error>> {
+//         let db_pool = MySqlPool::connect(database_url).await?;
 
-        Ok(Processor {
-            db_pool: Arc::new(db_pool),
-        })
-    }
+//         Ok(Processor {
+//             db_pool: Arc::new(db_pool),
+//         })
+//     }
 
-    pub async fn process_log(&self, log: &str) -> Result<(), Box<dyn std::error::Error>> {
-        sqlx::query("INSERT INTO syslogs (message) VALUES (?)")
-            .bind(log)
-            .execute(&*self.db_pool)
-            .await?;
-        Ok(())
-    }
-}
+//     pub async fn process_log(&self, log: &str) -> Result<(), Box<dyn std::error::Error>> {
+//         sqlx::query("INSERT INTO syslogs (message) VALUES (?)")
+//             .bind(log)
+//             .execute(&*self.db_pool)
+//             .await?;
+//         Ok(())
+//     }
+// }
 
 pub async fn syslog() -> Result<(), Box<dyn std::error::Error>> {
     let addr: SocketAddr = "0.0.0.0:514".parse()?;
@@ -40,31 +42,46 @@ pub async fn syslog() -> Result<(), Box<dyn std::error::Error>> {
         }
     };
 
-    let tcp_task = tokio::spawn({
+    let tcp_task = task::spawn({
         let processor = processor.clone();
         async move {
             loop {
-                let (socket, _) = tcp_listener.accept()?;
-                let processor = processor.clone();
-                tokio::spawn(async move {
-                    handle_tcp_connection(socket, processor).await;
-                });
+                match tcp_listener.accept() {
+                    Ok((socket, _)) => match TcpStream::from_std(socket) {
+                        Ok(socket) => {
+                            let processor = processor.clone();
+                            task::spawn(async move {
+                                handle_tcp_connection(socket, processor).await;
+                            });
+                        }
+                        Err(e) => eprintln!("Failed to convert socket: {:?}", e),
+                    },
+                    Err(e) => eprintln!("Failed to accept connection: {:?}", e),
+                }
             }
         }
     });
 
-    let udp_task = tokio::spawn({
+    let udp_task = task::spawn({
         let processor = processor.clone();
         async move {
             let mut buf = [0; 1024];
             loop {
-                let (len, addr) = udp_listener.recv_from(&mut buf)?;
-                let text = str::from_utf8_lossy(&buf[..len]);
-                processor.process_log(&text).await.unwrap();
+                match udp_listener.recv_from(&mut buf) {
+                    Ok((len, _)) => {
+                        let text = String::from_utf8_lossy(&buf[..len]);
+                        if let Err(e) = processor.process_log(&text).await {
+                            eprintln!("Failed to process log: {:?}", e);
+                        }
+                    }
+                    Err(e) => eprintln!("Failed to receive data: {:?}", e),
+                }
             }
         }
     });
 
+    tcp_task.await?;
+    udp_task.await?;
     Ok(())
 }
 
