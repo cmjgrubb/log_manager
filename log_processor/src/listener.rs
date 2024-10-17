@@ -1,40 +1,19 @@
-use sqlx::mysql::MySqlPool;
+use crate::processor::Processor;
+use dotenv::dotenv;
 use std::net::{SocketAddr, TcpListener, UdpSocket};
-use std::str;
-use std::sync::Arc;
 use tokio::io::AsyncReadExt;
 use tokio::net::TcpStream;
 use tokio::task;
 
-// #[derive(Clone)]
-// pub struct Processor {
-//     db_pool: Arc<MySqlPool>,
-// }
-
-// impl Processor {
-//     pub async fn new(database_url: &str) -> Result<Self, Box<dyn std::error::Error>> {
-//         let db_pool = MySqlPool::connect(database_url).await?;
-
-//         Ok(Processor {
-//             db_pool: Arc::new(db_pool),
-//         })
-//     }
-
-//     pub async fn process_log(&self, log: &str) -> Result<(), Box<dyn std::error::Error>> {
-//         sqlx::query("INSERT INTO syslogs (message) VALUES (?)")
-//             .bind(log)
-//             .execute(&*self.db_pool)
-//             .await?;
-//         Ok(())
-//     }
-// }
-
 pub async fn syslog() -> Result<(), Box<dyn std::error::Error>> {
+    dotenv().ok();
+
+    let database_url = std::env::var("DATABASE_URL")?;
     let addr: SocketAddr = "0.0.0.0:514".parse()?;
     let tcp_listener = TcpListener::bind(&addr)?;
     let udp_listener = UdpSocket::bind(&addr)?;
 
-    let processor = match Processor::new("mysql://user:password@localhost/database").await {
+    let processor = match Processor::new(&database_url).await {
         Ok(processor) => processor,
         Err(e) => {
             eprintln!("Failed to create processor: {e}");

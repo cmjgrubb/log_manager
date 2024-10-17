@@ -1,6 +1,9 @@
 mod listener;
 mod processor;
 
-fn main() {
-    listener::syslog();
+#[tokio::main]
+async fn main() {
+    if let Err(e) = listener::syslog().await {
+        eprintln!("Error: {:?}", e);
+    }
 }
