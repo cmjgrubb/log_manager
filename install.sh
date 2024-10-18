@@ -79,6 +79,7 @@ sudo chown -R log_manager:log_manager /home/log_manager/.cargo
 ## Log Processor
 cd /log_manager/log_processor
 sudo -u log_manager cargo build --release || { echo "Failed to build log_processor."; exit 1; }
+sudo setcap 'cap_net_bind_service=+ep' /log_manager/log_processor/target/release/log_processor || { echo "Failed to enable log_processor to communicate on port 514."; exit 1; }
 
 ## Log API
 cd /log_manager/log_api
