@@ -1,28 +1,31 @@
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
 
+use dotenv::dotenv;
 use rocket::serde::json::Json;
 use rocket::State;
 use sqlx::mysql::MySqlPool;
-use dotenv::dotenv;
+use sqlx::FromRow;
 use std::env;
 
-#[derive(serde::Serialize, sqlx::FromRow)]
+#[derive(FromRow, serde::Serialize)]
 struct Log {
-    timestamp: String,
+    id: i32,
     hostname: String,
+    timestamp: chrono::NaiveDateTime,
     log_level: String,
     message: String,
 }
 
-#[get("/logs?<hostname>&<log_level>&<message>")]
+#[get("/search?<hostname>&<log_level>&<message>")]
 async fn search_logs(
-    pool: &State<MySqlPool>,
     hostname: Option<String>,
     log_level: Option<String>,
     message: Option<String>,
-) -> Json<Vec<Log>> {
-    let query = 
-        "SELECT timestamp, hostname, log_level, message
+    pool: &State<MySqlPool>,
+) -> Result<Json<Vec<Log>>, rocket::http::Status> {
+    let query = "
+        SELECT id, hostname, timestamp, log_level, message
         FROM logs
         WHERE (:hostname IS NULL OR hostname = :hostname)
         AND (:log_level IS NULL OR log_level = :log_level)
@@ -32,16 +35,19 @@ async fn search_logs(
         .bind(&hostname)
         .bind(&log_level)
         .bind(&message)
-        .fetch_all(pool.inner()).await.unwrap();
+        .fetch_all(pool.inner())
+        .await;
 
-    Json(rows)
+    match rows {
+        Ok(logs) => Ok(Json(logs)),
+        Err(_) => Err(rocket::http::Status::InternalServerError),
+    }
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
-    let database_url = env::var("DATABASE_URL")
-        .expect("DATABASE_URL must be set");
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
     let pool = MySqlPool::connect(&database_url).await?;
 
     rocket::build()

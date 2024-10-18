@@ -1,0 +1,10 @@
+/Users/craiggrubb/GitHub/log_manager/log_api/target/debug/deps/libsqlformat-ce0a36609963a85e.rmeta: /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/lib.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/formatter.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/indentation.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/inline_block.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/params.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/tokenizer.rs
+
+/Users/craiggrubb/GitHub/log_manager/log_api/target/debug/deps/sqlformat-ce0a36609963a85e.d: /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/lib.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/formatter.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/indentation.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/inline_block.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/params.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/tokenizer.rs
+
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/lib.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/formatter.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/indentation.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/inline_block.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/params.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.4/src/tokenizer.rs:

@@ -1,0 +1,11 @@
+/Users/craiggrubb/GitHub/log_manager/log_processor/target/debug/deps/libsocket2-e0df41e3d31974b1.rmeta: /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/lib.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sockaddr.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/socket.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sockref.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sys/unix.rs
+
+/Users/craiggrubb/GitHub/log_manager/log_processor/target/debug/deps/libsocket2-e0df41e3d31974b1.rlib: /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/lib.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sockaddr.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/socket.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sockref.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sys/unix.rs
+
+/Users/craiggrubb/GitHub/log_manager/log_processor/target/debug/deps/socket2-e0df41e3d31974b1.d: /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/lib.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sockaddr.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/socket.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sockref.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sys/unix.rs
+
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/lib.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sockaddr.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/socket.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sockref.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/socket2-0.5.7/src/sys/unix.rs:

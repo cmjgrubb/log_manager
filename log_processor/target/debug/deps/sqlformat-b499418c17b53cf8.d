@@ -1,0 +1,10 @@
+/Users/craiggrubb/GitHub/log_manager/log_processor/target/debug/deps/libsqlformat-b499418c17b53cf8.rmeta: /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/lib.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/formatter.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/indentation.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/inline_block.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/params.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/tokenizer.rs
+
+/Users/craiggrubb/GitHub/log_manager/log_processor/target/debug/deps/sqlformat-b499418c17b53cf8.d: /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/lib.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/formatter.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/indentation.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/inline_block.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/params.rs /Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/tokenizer.rs
+
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/lib.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/formatter.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/indentation.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/inline_block.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/params.rs:
+/Users/craiggrubb/.cargo/registry/src/index.crates.io-6f17d22bba15001f/sqlformat-0.2.6/src/tokenizer.rs:
