@@ -1,18 +1,19 @@
-#[macro_use]
-extern crate rocket;
+// #[macro_use]
+// extern crate rocket;
 
 use dotenv::dotenv;
-use rocket::serde::json::Json;
-use rocket::State;
+use serde::{Deserialize, Serialize};
 use sqlx::mysql::MySqlPool;
 use sqlx::FromRow;
 use std::env;
+use rocket::get;
+use rocket::routes;
 
-#[derive(FromRow, serde::Serialize)]
+#[derive(FromRow, Serialize, Deserialize)]
 struct Log {
     id: i32,
     hostname: String,
-    timestamp: chrono::NaiveDateTime,
+    timestamp: String,
     log_level: String,
     message: String,
 }
@@ -31,10 +32,10 @@ async fn search_logs(
         AND (:log_level IS NULL OR log_level = :log_level)
         AND (:message IS NULL OR message LIKE CONCAT('%', :message, '%'))";
 
-    let rows = sqlx::query_as::<_, Log>(query)
-        .bind(&hostname)
-        .bind(&log_level)
-        .bind(&message)
+    let rows = sqlx::query_as<_, Log>(query)
+        .bind(hostname)
+        .bind(log_level)
+        .bind(message)
         .fetch_all(pool.inner())
         .await;
 
