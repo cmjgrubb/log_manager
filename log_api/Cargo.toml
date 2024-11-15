@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-rocket = { version = "0.5.1", default-features = false, features = ["get", "routes"] }
+rocket = { version = "0.5.1", default-features = false, features = ["json"] }
 serde = "1.0.130"
 sqlx = { version = "0.7.4", features = [ "mysql", "runtime-tokio-native-tls" ]}
 dotenv = "0.15.0"
